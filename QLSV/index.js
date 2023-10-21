@@ -1,6 +1,7 @@
 // tạo mảng
 var dssv = [];
-var dataJson = localStorage.getItem("DSSV_LOCAL");
+var viTriSua = -1;
+// localStorage.setItem("DSSV_LOCAL", {});
 if (dataJson != null) {
   let result = JSON.parse(dataJson);
 
@@ -79,6 +80,10 @@ function xoaSv(id) {
     return item.ma == id;
   });
   dssv.splice(viTri, 1);
+
+  // lưu lại thông tin
+  var dataJson = JSON.stringify(dssv);
+  localStorage.setItem("DSSV_LOCAL", dataJson);
   renderDssv(dssv);
 }
 
@@ -89,7 +94,7 @@ function suaSv(id) {
   });
 
   var sv = dssv[viTri];
-
+  viTriSua = viTri;
   // đưa thông tin lên form
   document.getElementById("txtMaSV").value = sv.ma;
   document.getElementById("txtTenSV").value = sv.ten;
@@ -97,4 +102,25 @@ function suaSv(id) {
   document.getElementById("txtPass").value = sv.matKhau;
   document.getElementById("txtDiemToan").value = sv.toan;
   document.getElementById("txtDiemVan").value = sv.van;
+}
+
+// cập nhật SV
+function capNhatSv() {
+  var _ma = document.getElementById("txtMaSV").value;
+  var _ten = document.getElementById("txtTenSV").value;
+  var _email = document.getElementById("txtEmail").value;
+  var _matKhau = document.getElementById("txtPass").value;
+  var _toan = document.getElementById("txtDiemToan").value * 1;
+  var _van = document.getElementById("txtDiemVan").value * 1;
+
+  //vị trí
+  var sinhVien1 = new SinhVien(_ma, _ten, _email, _matKhau, _toan, _van);
+
+  console.log(sinhVien1);
+  console.log(viTriSua);
+  dssv[viTriSua] = sinhVien1;
+
+  var dataJson = JSON.stringify(dssv);
+  localStorage.setItem("DSSV_LOCAL", dataJson);
+  renderDssv(dssv);
 }
